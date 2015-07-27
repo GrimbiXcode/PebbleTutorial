@@ -1,0 +1,23 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "GrimbiXcode",
+    "longName": "Tutorial1",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Tutorial1",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "619351eb-f6f6-47ef-be74-089f36d889dc",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
