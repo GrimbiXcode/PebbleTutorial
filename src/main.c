@@ -6,6 +6,8 @@
 ********************************************************************/
 static Window *s_main_window;
 static TextLayer *s_time_layer;
+static GBitmap *s_background_bitmap;
+static BitmapLayer *s_background_bitmap_layer;
 
 /********************************************************************
 * Routines
@@ -39,10 +41,25 @@ static void tick_handler(struct tm *tick_time, TimeUnits unit_changed){
 * Init-code
 ********************************************************************/
 static void main_window_load(Window *window){
+  // Create the Background
+  Layer *window_layer = window_get_root_layer(window);
+  GRect bounds =layer_get_bounds(window_layer);
+  
+  s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ONE);
+  
+  s_background_bitmap_layer = bitmap_layer_create(bounds);
+  bitmap_layer_set_bitmap(s_background_bitmap_layer, s_background_bitmap);
+  #ifdef PBL_PLATFORM_APLITE
+    bitmap_layer_set_compositing_mode(s_background_bitmap_layer, GCompOpAssign);
+  #elif PBL_PLATFORM_BASALT
+    bitmap_layer_set_compositing_mode(s_background_bitmap_layer, GCompOpSet);
+  #endif 
+    layer_add_child(window_layer, bitmap_layer_get_layer(s_background_bitmap_layer));
+  
   // Create time TextLayer
-  s_time_layer = text_layer_create(GRect(0, 55, 144, 50));
+  s_time_layer = text_layer_create(GRect(0, 100, 144, 50));
   text_layer_set_background_color(s_time_layer, GColorClear);
-  text_layer_set_text_color(s_time_layer, GColorBlack);
+  text_layer_set_text_color(s_time_layer, GColorWhite);
   text_layer_set_text(s_time_layer, "00:00");
 
   // Improve the layout to be more like a watchface
@@ -57,12 +74,19 @@ static void main_window_load(Window *window){
 }
 
 static void main_window_unload(Window *window){
-  
+  // Destroy Backgroundlayer
+  bitmap_layer_destroy(s_background_bitmap_layer);
+  gbitmap_destroy(s_background_bitmap);
+  // Destroy TextLayer
+  text_layer_destroy(s_time_layer);
 }
 
 static void init(){
   // Create main Window element and assign to pointer
   s_main_window = window_create();
+  #ifdef PBL_SDK_2
+    window_set_fullscreen(s_main_window, true);
+  #endif
 
   // Set handlers to manage the elements inside the Window
   window_set_window_handlers(s_main_window, (WindowHandlers) {
@@ -80,8 +104,6 @@ static void init(){
 static void deinit(){
   // Destroy Window
   window_destroy(s_main_window);
-  // Destroy TextLayer
-  text_layer_destroy(s_time_layer);
 }
 
 /********************************************************************

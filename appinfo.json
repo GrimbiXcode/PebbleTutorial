@@ -7,10 +7,16 @@
     "longName": "Tutorial1",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/converted.png",
+                "name": "IMAGE_ONE",
+                "type": "png"
+            }
+        ]
     },
     "sdkVersion": "3",
-    "shortName": "Tutorial1",
+    "shortName": "Electronic",
     "targetPlatforms": [
         "aplite",
         "basalt"
